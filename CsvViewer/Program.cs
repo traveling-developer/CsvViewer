@@ -7,59 +7,7 @@ namespace CsvViewer
 {
 	internal class Program
 	{
-		private static string[] Convert_line_to_record_fields(string line, string delimiter)
-		{
-			return Convert_line_to_record_fields(line, delimiter, new List<string>()).ToArray();
-		}
-
-		private static List<string> Convert_line_to_record_fields(string line, string delimiter, List<string> fields)
-		{
-			if (line == "")
-			{
-				return fields;
-			}
-
-			if (line.StartsWith("\""))
-			{
-				line = line.Substring(1);
-				int iApo = line.IndexOf("\"");
-				fields.Add(line.Substring(0, iApo).Trim());
-
-				line = line.Substring(iApo + 1);
-				int iDelim = line.IndexOf(delimiter);
-				if (iDelim >= 0)
-				{
-					line = line.Substring(iDelim + 1);
-				}
-				else
-				{
-					line = "";
-				}
-			}
-			else
-			{
-				int iDelim = line.IndexOf(delimiter);
-				if (iDelim >= 0)
-				{
-					fields.Add(line.Substring(0, iDelim).Trim());
-					line = line.Substring(iDelim + 1);
-				}
-				else
-				{
-					fields.Add(line.Trim());
-					line = "";
-				}
-			}
-
-			return Convert_line_to_record_fields(line, delimiter, fields);
-		}
-
-		private static string Create_disply_line_for_record(string[] recordFields, int[] colWidths)
-		{
-			return string.Join("|", recordFields.Select((f, i) => f.PadRight(colWidths[i])));
-		}
-
-		private static void Main(string[] args)
+		internal static void Main(string[] args)
 		{
 			string[] rawLines = File.ReadAllLines(args[0]);
 
@@ -132,6 +80,58 @@ namespace CsvViewer
 						break;
 				}
 			}
+		}
+
+		private static string[] Convert_line_to_record_fields(string line, string delimiter)
+		{
+			return Convert_line_to_record_fields(line, delimiter, new List<string>()).ToArray();
+		}
+
+		private static List<string> Convert_line_to_record_fields(string line, string delimiter, List<string> fields)
+		{
+			if (line == "")
+			{
+				return fields;
+			}
+
+			if (line.StartsWith("\""))
+			{
+				line = line.Substring(1);
+				int iApo = line.IndexOf("\"");
+				fields.Add(line.Substring(0, iApo).Trim());
+
+				line = line.Substring(iApo + 1);
+				int iDelim = line.IndexOf(delimiter);
+				if (iDelim >= 0)
+				{
+					line = line.Substring(iDelim + 1);
+				}
+				else
+				{
+					line = "";
+				}
+			}
+			else
+			{
+				int iDelim = line.IndexOf(delimiter);
+				if (iDelim >= 0)
+				{
+					fields.Add(line.Substring(0, iDelim).Trim());
+					line = line.Substring(iDelim + 1);
+				}
+				else
+				{
+					fields.Add(line.Trim());
+					line = "";
+				}
+			}
+
+			return Convert_line_to_record_fields(line, delimiter, fields);
+		}
+
+		private static string Create_disply_line_for_record(string[] recordFields, int[] colWidths)
+		{
+			return string.Join("|", recordFields.Select((f, i) => f.PadRight(colWidths[i])));
 		}
 	}
 }
